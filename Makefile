@@ -1,6 +1,6 @@
 APP_NAME?=api
 DATE?=`date "+%FT%H:%M:%S"`
-IMAGE_REGISTRY?=github.com/crayoned/anti_bruteforce
+IMAGE_REGISTRY?=github.com/ats2otus/final_project
 IMAGE_VERSION?=$(shell git rev-parse --short=8 HEAD)
 IMAGE_TAG?=${IMAGE_REGISTRY}:${IMAGE_VERSION}
 
