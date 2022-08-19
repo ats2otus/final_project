@@ -15,14 +15,6 @@ var (
 	envPrefix = ""
 )
 
-// @title           Anti bruteforce
-// @Description 	Сервис проверки на bruteforce
-// @version         1.0.0
-// @schemes			http
-// @BasePath  		/v1
-// @accept			json
-// @produce 		json
-
 func main() {
 	var config Config
 	if err := envconfig.Process(envPrefix, &config); err != nil {
