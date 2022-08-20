@@ -1,0 +1,313 @@
+{
+    "produces": [
+        "application/json"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Сервис проверки на bruteforce",
+        "title": "Anti bruteforce",
+        "contact": {},
+        "version": "1.0.0"
+    },
+    "basePath": "/v1",
+    "paths": {
+        "/allow": {
+            "post": {
+                "description": "Проверка на bruteforce",
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Bruteforce detection",
+                "parameters": [
+                    {
+                        "description": "данные для проверки",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.CheckItem"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Result"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/blacklist": {
+            "post": {
+                "description": "Добавление IP в blacklist",
+                "tags": [
+                    "BlackList"
+                ],
+                "summary": "Blacklist append",
+                "parameters": [
+                    {
+                        "description": "подсеть (IP + маска)",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.ListItem"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/main.NoContent"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Удаление IP из blacklist",
+                "tags": [
+                    "BlackList"
+                ],
+                "summary": "Blacklist remove",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "подсеть (IP + маска)",
+                        "name": "subnet",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/main.NoContent"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset": {
+            "post": {
+                "description": "Сброс текущих ограничений по бакетам",
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Reset buckets",
+                "parameters": [
+                    {
+                        "description": "данные для сброса",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.ResetItem"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/main.NoContent"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/whitelist": {
+            "post": {
+                "description": "Добавление IP в whitelist",
+                "tags": [
+                    "WhiteList"
+                ],
+                "summary": "Whitelist append",
+                "parameters": [
+                    {
+                        "description": "подсеть (IP + маска)",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.ListItem"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/main.NoContent"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Удаление IP из whitelist",
+                "tags": [
+                    "WhiteList"
+                ],
+                "summary": "Whitelist remove",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "подсеть (IP + маска)",
+                        "name": "subnet",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/main.NoContent"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/main.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.CheckItem": {
+            "type": "object",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "example": "127.0.0.1"
+                },
+                "login": {
+                    "type": "string",
+                    "example": "freak192"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "pa$$W0rD"
+                }
+            }
+        },
+        "main.Error": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "format": "dateTime",
+                    "example": "2006-01-02T15:04:05Z07:00"
+                },
+                "errors": {
+                    "type": "string",
+                    "example": "error description"
+                }
+            }
+        },
+        "main.ListItem": {
+            "type": "object",
+            "properties": {
+                "subnet": {
+                    "type": "string",
+                    "example": "192.1.1.0/25"
+                }
+            }
+        },
+        "main.NoContent": {
+            "type": "object"
+        },
+        "main.ResetItem": {
+            "type": "object",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "example": "127.0.0.1"
+                },
+                "login": {
+                    "type": "string",
+                    "example": "freak192"
+                }
+            }
+        },
+        "main.Result": {
+            "type": "object",
+            "properties": {
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
