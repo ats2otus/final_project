@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/crayoned/anti_bruteforce/pkg/bwlist"
-	"github.com/crayoned/anti_bruteforce/pkg/rate"
+	"github.com/ats2otus/final_project/pkg/bwlist"
+	"github.com/ats2otus/final_project/pkg/rate"
 )
 
 type rateGroup struct {

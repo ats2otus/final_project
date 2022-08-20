@@ -1,4 +1,4 @@
-module github.com/crayoned/anti_bruteforce
+module github.com/ats2otus/final_project
 
 go 1.18
 

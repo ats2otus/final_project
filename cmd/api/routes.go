@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/crayoned/anti_bruteforce/pkg/bwlist"
+	"github.com/ats2otus/final_project/pkg/bwlist"
 	"github.com/go-chi/chi/v5"
 )
 
