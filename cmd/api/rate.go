@@ -7,11 +7,16 @@ import (
 	"time"
 
 	"github.com/crayoned/anti_bruteforce/pkg/bwlist"
+	"github.com/crayoned/anti_bruteforce/pkg/rate"
 )
 
 type rateGroup struct {
 	blacklist bwlist.BWList
 	whitelist bwlist.BWList
+
+	limitByIP     rate.Limiter
+	limitByLogin  rate.Limiter
+	limitByPasswd rate.Limiter
 }
 
 func (rg *rateGroup) writeError(w http.ResponseWriter, r *http.Request, code int, err error) {

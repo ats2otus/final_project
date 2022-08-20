@@ -21,19 +21,30 @@ func (rg *rateGroup) allow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if payload.IP != "" {
-		ip := net.ParseIP(payload.IP)
-		if rg.whitelist.Contains(ip) {
-			rg.writeResult(w, r, http.StatusOK, Result{Ok: true})
-			return
-		}
-		if rg.blacklist.Contains(ip) {
-			rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
-			return
-		}
+	ip := net.ParseIP(payload.IP)
+	if rg.whitelist.Contains(ip) {
+		rg.writeResult(w, r, http.StatusOK, Result{Ok: true})
+		return
+	}
+	if rg.blacklist.Contains(ip) {
+		rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
+		return
 	}
 
-	w.WriteHeader(http.StatusNotImplemented)
+	if ok := rg.limitByIP.Allow(payload.IP); !ok {
+		rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
+		return
+	}
+	if ok := rg.limitByLogin.Allow(payload.Login); !ok {
+		rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
+		return
+	}
+	if ok := rg.limitByPasswd.Allow(payload.Password); !ok {
+		rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
+		return
+	}
+
+	rg.writeResult(w, r, http.StatusOK, Result{Ok: true})
 }
 
 // @Summary		 	Reset buckets
@@ -50,5 +61,9 @@ func (rg *rateGroup) reset(w http.ResponseWriter, r *http.Request) {
 		rg.writeError(w, r, http.StatusBadRequest, err)
 		return
 	}
-	w.WriteHeader(http.StatusNotImplemented)
+
+	rg.limitByIP.Reset(payload.IP)
+	rg.limitByLogin.Reset(payload.Login)
+
+	rg.writeResult(w, r, http.StatusAccepted, NoContent{})
 }
