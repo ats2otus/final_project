@@ -22,6 +22,7 @@ func (rs *rateService) allow(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ip := net.ParseIP(payload.IP)
+
 	if rs.whitelist.Contains(ip) {
 		rs.writeResult(w, r, http.StatusOK, Result{Ok: true})
 		return
@@ -30,7 +31,6 @@ func (rs *rateService) allow(w http.ResponseWriter, r *http.Request) {
 		rs.writeResult(w, r, http.StatusOK, Result{Ok: false})
 		return
 	}
-
 	if ok := rs.limitByIP.Allow(payload.IP); !ok {
 		rs.writeResult(w, r, http.StatusOK, Result{Ok: false})
 		return
