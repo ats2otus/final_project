@@ -8,6 +8,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/ats2otus/final_project/pkg/bwlist"
+	"github.com/ats2otus/final_project/pkg/rate"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -24,9 +26,18 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
+	service := rateService{
+		blacklist: bwlist.New(),
+		whitelist: bwlist.New(),
+
+		limitByIP:     rate.NewLimiter(config.Rate.Interval, config.Rate.IP),
+		limitByLogin:  rate.NewLimiter(config.Rate.Interval, config.Rate.Login),
+		limitByPasswd: rate.NewLimiter(config.Rate.Interval, config.Rate.Password),
+	}
+
 	server := http.Server{
 		Addr:         config.Web.Addr,
-		Handler:      createHTTPHandler(),
+		Handler:      service.Handler(),
 		ReadTimeout:  config.Web.ReadTimeout,
 		WriteTimeout: config.Web.WriteTimeout,
 	}

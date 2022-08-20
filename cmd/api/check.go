@@ -14,37 +14,37 @@ import (
 // @Failure	500		{object} 	Error
 // @Tags 	Common
 // @Router	/allow 	[post]
-func (rg *rateGroup) allow(w http.ResponseWriter, r *http.Request) {
+func (rs *rateService) allow(w http.ResponseWriter, r *http.Request) {
 	var payload CheckItem
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
-		rg.writeError(w, r, http.StatusBadRequest, err)
+		rs.writeError(w, r, http.StatusBadRequest, err)
 		return
 	}
 
 	ip := net.ParseIP(payload.IP)
-	if rg.whitelist.Contains(ip) {
-		rg.writeResult(w, r, http.StatusOK, Result{Ok: true})
+	if rs.whitelist.Contains(ip) {
+		rs.writeResult(w, r, http.StatusOK, Result{Ok: true})
 		return
 	}
-	if rg.blacklist.Contains(ip) {
-		rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
-		return
-	}
-
-	if ok := rg.limitByIP.Allow(payload.IP); !ok {
-		rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
-		return
-	}
-	if ok := rg.limitByLogin.Allow(payload.Login); !ok {
-		rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
-		return
-	}
-	if ok := rg.limitByPasswd.Allow(payload.Password); !ok {
-		rg.writeResult(w, r, http.StatusOK, Result{Ok: false})
+	if rs.blacklist.Contains(ip) {
+		rs.writeResult(w, r, http.StatusOK, Result{Ok: false})
 		return
 	}
 
-	rg.writeResult(w, r, http.StatusOK, Result{Ok: true})
+	if ok := rs.limitByIP.Allow(payload.IP); !ok {
+		rs.writeResult(w, r, http.StatusOK, Result{Ok: false})
+		return
+	}
+	if ok := rs.limitByLogin.Allow(payload.Login); !ok {
+		rs.writeResult(w, r, http.StatusOK, Result{Ok: false})
+		return
+	}
+	if ok := rs.limitByPasswd.Allow(payload.Password); !ok {
+		rs.writeResult(w, r, http.StatusOK, Result{Ok: false})
+		return
+	}
+
+	rs.writeResult(w, r, http.StatusOK, Result{Ok: true})
 }
 
 // @Summary		 	Reset buckets
@@ -55,15 +55,15 @@ func (rg *rateGroup) allow(w http.ResponseWriter, r *http.Request) {
 // @Failure	500		{object} 	Error
 // @Tags 	Common
 // @Router	/reset 	[post]
-func (rg *rateGroup) reset(w http.ResponseWriter, r *http.Request) {
+func (rs *rateService) reset(w http.ResponseWriter, r *http.Request) {
 	var payload ResetItem
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
-		rg.writeError(w, r, http.StatusBadRequest, err)
+		rs.writeError(w, r, http.StatusBadRequest, err)
 		return
 	}
 
-	rg.limitByIP.Reset(payload.IP)
-	rg.limitByLogin.Reset(payload.Login)
+	rs.limitByIP.Reset(payload.IP)
+	rs.limitByLogin.Reset(payload.Login)
 
-	rg.writeResult(w, r, http.StatusAccepted, NoContent{})
+	rs.writeResult(w, r, http.StatusAccepted, NoContent{})
 }

@@ -9,8 +9,9 @@ type Config struct {
 		WriteTimeout time.Duration `default:"5s"`
 	}
 	Rate struct {
-		IP       string `default:"1000"`
-		Login    string `default:"10"`
-		Password string `default:"100"`
+		IP       int           `default:"1000"`
+		Login    int           `default:"10"`
+		Password int           `default:"100"`
+		Interval time.Duration `default:"1m"`
 	}
 }
