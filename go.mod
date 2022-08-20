@@ -1,6 +1,6 @@
 module github.com/ats2otus/final_project
 
-go 1.18
+go 1.16
 
 require (
 	github.com/go-chi/chi/v5 v5.0.7
